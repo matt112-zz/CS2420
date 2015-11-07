@@ -28,14 +28,17 @@ public:
 	void destroy(Node* root);
 	void insert(int data);
 	Node* insert(Node* &root, int data);
-	/*void remove();
-	Node* leftRotate();
-	Node* rightRotate();
+	void remove();
+	Node* leftrotate(Node* root);
+	Node* rightrotate(Node* root);
 	bool search();
-	void display();*/
+	void display();
 	void preorder();
 	void preorder(Node* &root);
 	int balance(Node* root);
+
+	int height(Node* root);
+	int max(Node* left, Node* right);
 
 };
 
