@@ -1,4 +1,9 @@
 // MODIFICATION MEMBER FUNCTIONS
+
+//I am doing a test on this code to try it out
+
+// Here is another comment :)
+
 void Sequence::resize(int new_capacity){
 
 }
