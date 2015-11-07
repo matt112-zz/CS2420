@@ -4,6 +4,11 @@
 
 // Here is another comment :)
 
+
+
+
+//Oh no I forgot to write the comment!
+
 void Sequence::resize(int new_capacity){
 
 }
