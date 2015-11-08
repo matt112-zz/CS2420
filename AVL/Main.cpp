@@ -87,7 +87,7 @@ void print_menu( )
     cout << "The following choices are available: " << endl;
     cout << " P   Print a copy of the entire AVL with indents" << endl;
     cout << " S   Print the result from the size( ) function" << endl;
-    cout << " E   Erase a number from the tree" << endl;
+    cout << " R   Remove a number from the tree" << endl;
     cout << " 1   Print the list in a PreOrder manner" << endl;
     cout << " 2   Print the list in a InOrder manner" << endl;
     cout << " 3   Print the list in a PostOrder manner" << endl;

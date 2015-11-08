@@ -40,7 +40,7 @@ public:
 	void inorder(Node* root);
 	void postorder();
 	void postorder(Node* root);
-	void rebalance(Node* root);
+	void rebalance(Node* &root);
 
 	int balance(Node* root);
 	int Size();

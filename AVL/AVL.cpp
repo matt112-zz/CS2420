@@ -43,25 +43,7 @@ AVL::Node* AVL::insert(Node* &root, int data) {
 	else if(data > root->data) root->right = insert(root->right, data);
 	else cout << "Duplicate data is not allowed" << endl;
 
-	int bal = balance(root); // if negative balance, right subtree is heavy. if positive balance, left subtree is heavy
-	if(bal > 1) {  // left heavy
-		if(balance(root->left) > 0) {  // double left heavy -> single rotation
-			return root = rightrotate(root);
-		}
-		else{ // double rotation
-			root->left = leftrotate(root->left);
-			return root = rightrotate(root);
-		}
-	}
-	else if(bal < -1) { // right heavy
-		if(balance(root->right) < 0) {  // double right heavy -> single left rotation
-			return root = leftrotate(root);
-		}
-		else{ // double rotation
-			root->right = rightrotate(root->right);
-			return root = leftrotate(root);
-		}
-	}
+	rebalance(root);
 
 	root->height = max(root->left, root->right) + 1;   // update height
 	return root;
@@ -76,14 +58,26 @@ AVL::Node* AVL::remove(Node* root, int data) {
 		cout << data << " is not in the tree. Nothing to remove" << endl;
 		return root;
 	}
-	else if(data < root->data) root->left = remove(root->left, data);
-	else if(data > root->data) root->right = remove(root->right, data);
+	else if(data < root->data) {
+		root->left = remove(root->left, data);
+
+		// Make sure the tree still maintains AVL property after removing an element
+			rebalance(root);
+			root->height = max(root->left, root->right) + 1;   // update height
+	}
+	else if(data > root->data) {
+		root->right = remove(root->right, data);
+		// Make sure the tree still maintains AVL property after removing an element
+			rebalance(root);
+			root->height = max(root->left, root->right) + 1;   // update height
+	}
 	else { //found data to remove
 		//case 1: data to be deleted is a leaf node
 		if(root->left == nullptr && root->right == nullptr)
 		{
 			delete root;
 			root = nullptr;
+			size--;
 		}
 
 		//case 2: data to be delete has only one child
@@ -92,12 +86,14 @@ AVL::Node* AVL::remove(Node* root, int data) {
 			Node* temp = root;
 			root = root->right;
 			delete temp;
+			size--;
 		}
 		else if(root->right == nullptr)   // Node has a left child
 		{
 			Node* temp = root;
 			root = root->left;
 			delete temp;
+			size--;
 		}
 
 		//case 3: data to be delete has two children
@@ -107,11 +103,9 @@ AVL::Node* AVL::remove(Node* root, int data) {
 			root->data = temp->data;
 			remove(root->right, temp->data);
 		}
-
-		size--;
-
-		// Make sure the tree still maintains AVL property after removing an element
 	}
+
+	return root;
 }
 
 AVL::Node* AVL::leftrotate(Node* root) {
@@ -238,6 +232,25 @@ AVL::Node* AVL::findMin(Node* root) {
 	return root;
 }
 
-void AVL::rebalance(Node* root) {
+void AVL::rebalance(Node* &root) {
+	int bal = balance(root); // if negative balance, right subtree is heavy. if positive balance, left subtree is heavy
 
+	if(bal > 1) {  // left heavy
+		if(balance(root->left) > 0) {  // double left heavy -> single rotation
+			root = rightrotate(root);
+		}
+		else{ // double rotation
+			root->left = leftrotate(root->left);
+			root = rightrotate(root);
+		}
+	}
+	else if(bal < -1) { // right heavy
+		if(balance(root->right) < 0) {  // double right heavy -> single left rotation
+			root = leftrotate(root);
+		}
+		else{ // double rotation
+			root->right = rightrotate(root->right);
+			root = leftrotate(root);
+		}
+	}
 }
