@@ -43,9 +43,10 @@ AVL::Node* AVL::insert(Node* &root, int data) {
 	else if(data > root->data) root->right = insert(root->right, data);
 	else cout << "Duplicate data is not allowed" << endl;
 
+	root->height = max(root->left, root->right) + 1;   // update height
+
 	rebalance(root);
 
-	root->height = max(root->left, root->right) + 1;   // update height
 	return root;
 }
 
@@ -60,16 +61,9 @@ AVL::Node* AVL::remove(Node* root, int data) {
 	}
 	else if(data < root->data) {
 		root->left = remove(root->left, data);
-
-		// Make sure the tree still maintains AVL property after removing an element
-			rebalance(root);
-			root->height = max(root->left, root->right) + 1;   // update height
 	}
 	else if(data > root->data) {
 		root->right = remove(root->right, data);
-		// Make sure the tree still maintains AVL property after removing an element
-			rebalance(root);
-			root->height = max(root->left, root->right) + 1;   // update height
 	}
 	else { //found data to remove
 		//case 1: data to be deleted is a leaf node
@@ -104,6 +98,12 @@ AVL::Node* AVL::remove(Node* root, int data) {
 			remove(root->right, temp->data);
 		}
 	}
+
+	if(root == nullptr) return root;
+
+	// Make sure the tree still maintains AVL property after removing an element
+	root->height = max(root->left, root->right) + 1;   // update height
+	rebalance(root);
 
 	return root;
 }
@@ -180,7 +180,10 @@ void AVL::postorder(Node* root) {
 }
 
 int AVL::balance(Node* root) {
-	return height(root->left) - height(root->right);
+	if(root) {
+		return height(root->left) - height(root->right);
+	}
+	else return 0;
 }
 
 int AVL::Size() {
@@ -236,7 +239,7 @@ void AVL::rebalance(Node* &root) {
 	int bal = balance(root); // if negative balance, right subtree is heavy. if positive balance, left subtree is heavy
 
 	if(bal > 1) {  // left heavy
-		if(balance(root->left) > 0) {  // double left heavy -> single rotation
+		if(balance(root->left) >= 0) {  // double left heavy -> single rotation
 			root = rightrotate(root);
 		}
 		else{ // double rotation
@@ -245,7 +248,7 @@ void AVL::rebalance(Node* &root) {
 		}
 	}
 	else if(bal < -1) { // right heavy
-		if(balance(root->right) < 0) {  // double right heavy -> single left rotation
+		if(balance(root->right) <= 0) {  // double right heavy -> single left rotation
 			root = leftrotate(root);
 		}
 		else{ // double rotation
@@ -253,4 +256,5 @@ void AVL::rebalance(Node* &root) {
 			root = leftrotate(root);
 		}
 	}
+	else return; //Node is not unbalanced
 }
