@@ -1,16 +1,21 @@
 #include <iostream>
+#include <time.h>
+#include <stdlib.h>
 #include "AVL.h"
 
 using namespace std;
 
 int main() {
+	srand(time(NULL));
 	AVL test;
 
-	test.insert(10);
-	test.insert(15);
-	test.insert(20);
-	test.insert(25);
-	test.insert(30);
+	const int size = 20;
+
+	for (int i = 0; i < size; i++) {
+	      test.insert((rand() % 50) + 1);
+	}
+
+	test.print();
 
 	test.preorder();
 

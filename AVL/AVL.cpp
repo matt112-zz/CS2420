@@ -7,6 +7,7 @@
 
 #include "AVL.h"
 #include <iostream>
+#include <iomanip>
 
 using namespace std;
 
@@ -48,9 +49,9 @@ AVL::Node* AVL::insert(Node* &root, int data) {
 		cout << "Duplicate data is not allowed" << endl;
 	}
 
-	int balance = height(root->left) - height(root->right); // if negative balance, right subtree is heavy. if positive balance, left subtree is heavy
-	if(balance > 1) {  //left heavy
-		if(height(root->left->left) > height(root->left->right)) {  //double left heavy
+	int bal = balance(root); // if negative balance, right subtree is heavy. if positive balance, left subtree is heavy
+	if(bal > 1) {  //left heavy
+		if(balance(root->left) > 0) {  //double left heavy
 			return root = rightrotate(root);
 		}
 		else{
@@ -58,8 +59,8 @@ AVL::Node* AVL::insert(Node* &root, int data) {
 			return root = rightrotate(root);
 		}
 	}
-	else if(balance < -1) { //right heavy
-		if(height(root->right->right) > height(root->right->left)) {  //double right heavy
+	else if(bal < -1) { //right heavy
+		if(balance(root->right) < 0) {  //double right heavy
 			return root = leftrotate(root);
 		}
 		else{
@@ -67,9 +68,7 @@ AVL::Node* AVL::insert(Node* &root, int data) {
 			return root = leftrotate(root);
 		}
 	}
-	else {
-		cout << "Node with element " << root->data << " is balanced" << endl;
-	}
+
 	root->height = max(root->left, root->right) + 1;
 	return root;
 }
@@ -79,25 +78,25 @@ void AVL::remove() {
 }
 
 AVL::Node* AVL::leftrotate(Node* root) {
-	Node* temp = root;
-	root = root->right;
-	root->left = temp;
+	Node* newroot = root->right;
+	root->right = newroot->left;
+	newroot->left = root;
 
-	temp->height = max(root->left,root->right) + 1;
-	root->height = max(root->left, root->right) + 1;
+	root->height = max(root->left,root->right) + 1;
+	newroot->height = max(newroot->left, newroot->right) + 1;
 
-	return root;
+	return newroot;
 }
 
 AVL::Node* AVL::rightrotate(Node* root) {
-	Node* temp = root;
-	root = root->left;
-	root->right = temp;
+	Node* newroot = root->left;
+	root->left = newroot->right;
+	newroot->right = root;
 
-	temp->height = max(root->left,root->right) + 1;
-	root->height = max(root->left, root->right) + 1;
+	root->height = max(root->left,root->right) + 1;
+	newroot->height = max(newroot->left, newroot->right) + 1;
 
-	return root;
+	return newroot;
 }
 
 bool AVL::search() {
@@ -109,8 +108,7 @@ void AVL::display() {
 }
 
 void AVL::preorder() {
-	pre
-	order(root);
+	preorder(root);
 }
 void AVL::preorder(Node* &root) {
 	if(root) {
@@ -133,4 +131,33 @@ int AVL::height(Node* root) {
 
 int AVL::max(Node* left, Node* right) {
 	return (height(left) > height(right))? height(left) : height(right);
+}
+
+void AVL::print()
+{
+    if(root)
+    {
+        print(root, 0);
+    }
+}
+void AVL::print(Node* root, int depth)
+{
+    cout << setw(4*depth) << "";
+
+    if(root) {
+
+        if(root->left == nullptr && root->right == nullptr)
+        {
+            cout << root->data << " [leaf]" << endl;
+        }
+        else
+        {
+            cout << root->data << endl;
+            print(root->left, depth+1);
+            print(root->right, depth+1);
+        }
+    }
+    else {
+        cout << "[Empty]" << endl;
+    }
 }

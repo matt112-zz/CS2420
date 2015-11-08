@@ -39,6 +39,8 @@ public:
 
 	int height(Node* root);
 	int max(Node* left, Node* right);
+	void print();
+	void print(Node* root, int depth);
 
 };
 
