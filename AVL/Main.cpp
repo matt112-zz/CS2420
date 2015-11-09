@@ -51,7 +51,7 @@ int main( )
         switch (choice)
         {
 
-            case 'S': cout << "Size is " << test.Size() << endl;
+            case 'S': cout << "Size is " << test.getsize() << endl;
                       break;
             case 'I': test.insert(get_number( ));
                       break;

@@ -30,7 +30,7 @@ void AVL::destroy(Node* root) {
 	}
 }
 void AVL::insert(int data) {
-	cout << "Inserting " << data << " into the AVL Tree" << endl;
+	cout << "Inserting " << data << endl;
 	insert(root, data);
 }
 
@@ -53,10 +53,9 @@ void AVL::remove(int data) {
 	remove(root, data);
 }
 
-AVL::Node* AVL::remove(Node* root, int data) {
+AVL::Node* AVL::remove(Node* &root, int data) {
 	if(root == nullptr) {
 		cout << data << " is not in the tree. Nothing to remove" << endl;
-		return root;
 	}
 	else if(data < root->data) {
 		root->left = remove(root->left, data);
@@ -183,12 +182,15 @@ int AVL::balance(Node* root) {
 	return height(root->left) - height(root->right);
 }
 
-int AVL::Size() {
+int AVL::getsize() {
 	return size;
 }
+
 int AVL::height(Node* root) {
-	if(root) return root->height;
-	else return 0;
+/*	if(root) return root->height;
+	else return 0;*/
+	if(root == nullptr) return 0;
+	else return root->height;
 }
 
 
@@ -234,23 +236,28 @@ AVL::Node* AVL::findMin(Node* root) {
 
 void AVL::rebalance(Node* &root) {
 	int bal = balance(root); // if negative balance, right subtree is heavy. if positive balance, left subtree is heavy
-
+	cout << "Balance of Node " << root->data << " is " << bal << endl;
 	if(bal > 1) {  // left heavy
-		if(balance(root->left) > 0) {  // double left heavy -> single rotation
+		if(balance(root->left) > 0) {  // double left heavy -> single right rotation
+			cout << "Single right rotation" << endl;
 			root = rightrotate(root);
 		}
 		else{ // double rotation
+			cout << "Double Left Right Rotation" << endl;
 			root->left = leftrotate(root->left);
 			root = rightrotate(root);
 		}
 	}
 	else if(bal < -1) { // right heavy
 		if(balance(root->right) < 0) {  // double right heavy -> single left rotation
+			cout << "Single left rotation" << endl;
 			root = leftrotate(root);
 		}
 		else{ // double rotation
+			cout << "Double Right Left Rotation" << endl;
 			root->right = rightrotate(root->right);
 			root = leftrotate(root);
 		}
 	}
+	else cout << root->data << " is balanced" << endl;
 }

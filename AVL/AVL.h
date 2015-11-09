@@ -29,7 +29,7 @@ public:
 	void insert(int data);
 	Node* insert(Node* &root, int data);
 	void remove(int data);
-	Node* remove(Node* root, int data);
+	Node* remove(Node* &root, int data);
 	Node* leftrotate(Node* root);
 	Node* rightrotate(Node* root);
 	bool search(int data);
@@ -43,7 +43,7 @@ public:
 	void rebalance(Node* &root);
 
 	int balance(Node* root);
-	int Size();
+	int getsize();
 
 	int height(Node* root);
 	int max(Node* left, Node* right);
