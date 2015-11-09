@@ -53,9 +53,10 @@ void AVL::remove(int data) {
 	remove(root, data);
 }
 
-AVL::Node* AVL::remove(Node* &root, int data) {
+AVL::Node* AVL::remove(Node* root, int data) {
 	if(root == nullptr) {
 		cout << data << " is not in the tree. Nothing to remove" << endl;
+
 	}
 	else if(data < root->data) {
 		root->left = remove(root->left, data);
