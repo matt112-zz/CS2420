@@ -11,7 +11,6 @@
 
 using namespace std;
 
-
 AVL::AVL() {
 	root = nullptr;
 	size = 0;
@@ -29,6 +28,7 @@ void AVL::destroy(Node* root) {
 		root = nullptr;
 	}
 }
+
 void AVL::insert(int data) {
 	cout << "Inserting " << data << endl;
 	insert(root, data);
@@ -50,6 +50,7 @@ AVL::Node* AVL::insert(Node* &root, int data) {
 }
 
 void AVL::remove(int data) {
+	cout << "Removing " << data << " from the tree" << endl;
 	remove(root, data);
 }
 
@@ -61,14 +62,14 @@ AVL::Node* AVL::remove(Node* &root, int data) {
 		root->left = remove(root->left, data);
 
 		// Make sure the tree still maintains AVL property after removing an element
-			rebalance(root);
-			root->height = max(root->left, root->right) + 1;   // update height
+		rebalance(root);
+		root->height = max(root->left, root->right) + 1;   // update height
 	}
 	else if(data > root->data) {
 		root->right = remove(root->right, data);
 		// Make sure the tree still maintains AVL property after removing an element
-			rebalance(root);
-			root->height = max(root->left, root->right) + 1;   // update height
+		rebalance(root);
+		root->height = max(root->left, root->right) + 1;   // update height
 	}
 	else { //found data to remove
 		//case 1: data to be deleted is a leaf node
@@ -128,9 +129,11 @@ AVL::Node* AVL::rightrotate(Node* root) {
 
 	return newroot;
 }
+
 bool AVL::search(int data) {
-	return search(data);
+	return search(root, data);
 }
+
 bool AVL::search(Node* root, int data) {
 	if(root == nullptr) return false;
 	else if(root->data == data) return true;
@@ -157,6 +160,7 @@ void AVL::inorder() {
 	inorder(root);
 	cout << endl;
 }
+
 void AVL::inorder(Node* root) {
 	if(root) {
 		inorder(root->left);
@@ -170,6 +174,7 @@ void AVL::postorder() {
 	postorder(root);
 	cout << endl;
 }
+
 void AVL::postorder(Node* root) {
 	if(root) {
 		postorder(root->left);
@@ -187,12 +192,9 @@ int AVL::getsize() {
 }
 
 int AVL::height(Node* root) {
-/*	if(root) return root->height;
-	else return 0;*/
 	if(root == nullptr) return 0;
 	else return root->height;
 }
-
 
 int AVL::max(Node* left, Node* right) {
 	return (height(left) > height(right))? height(left) : height(right);
@@ -200,37 +202,39 @@ int AVL::max(Node* left, Node* right) {
 
 void AVL::print()
 {
-    if(root)
-    {
-        print(root, 0);
-    }
+	if(root)
+	{
+		print(root, 0);
+	}
+	else cout << "Tree is empty. Nothing to print." << endl;
 }
+
 void AVL::print(Node* root, int depth)
 {
-    cout << setw(4*depth) << "";
+	cout << setw(4*depth) << "";
 
-    if(root) {
-        if(root->left == nullptr && root->right == nullptr)
-        {
-            cout << root->data << " [leaf]" << endl;
-        }
-        else
-        {
-            cout << root->data << endl;
-            print(root->left, depth+1);
-            print(root->right, depth+1);
-        }
-    }
-    else {
-        cout << "[Empty]" << endl;
-    }
+	if(root) {
+		if(root->left == nullptr && root->right == nullptr)
+		{
+			cout << root->data << " [leaf]" << endl;
+		}
+		else
+		{
+			cout << root->data << endl;
+			print(root->left, depth+1);
+			print(root->right, depth+1);
+		}
+	}
+	else {
+		cout << "[Empty]" << endl;
+	}
 }
 
 AVL::Node* AVL::findMin(Node* root) {
 	if(root->left != nullptr)
-	    {
-	        findMin(root->left);
-	    }
+	{
+		findMin(root->left);
+	}
 	return root;
 }
 

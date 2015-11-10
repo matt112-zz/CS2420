@@ -22,35 +22,32 @@ private:
 	int size;
 	Node* root;
 
-public:
-	AVL();
-	virtual ~AVL();
 	void destroy(Node* root);
-	void insert(int data);
 	Node* insert(Node* &root, int data);
-	void remove(int data);
 	Node* remove(Node* &root, int data);
 	Node* leftrotate(Node* root);
 	Node* rightrotate(Node* root);
-	bool search(int data);
 	bool search(Node* root, int data);
-	void preorder();
 	void preorder(Node* root);
-	void inorder();
 	void inorder(Node* root);
-	void postorder();
 	void postorder(Node* root);
 	void rebalance(Node* &root);
-
 	int balance(Node* root);
-	int getsize();
-
 	int height(Node* root);
 	int max(Node* left, Node* right);
-	void print();
 	void print(Node* root, int depth);
 	Node* findMin(Node* root);
-
+public:
+	AVL();
+	virtual ~AVL();
+	void insert(int data);
+	void remove(int data);
+	bool search(int data);
+	void preorder();
+	void inorder();
+	void postorder();
+	int getsize();
+	void print();
 };
 
 #endif /* AVL_H_ */
