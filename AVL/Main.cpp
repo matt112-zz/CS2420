@@ -9,15 +9,10 @@
 //
 //violation of this disclaimer will result in a 0 for the project.
 
-#include <iostream>
-#include <fstream>
-#include <time.h>
-#include <stdlib.h>
-#include <sstream>
-#include "AVL.h"
-//#include "Queue.h"
 #include <cctype>       // Provides toupper
-#include <cstdlib>      // Provides EXIT_SUCCESS
+#include <iostream>
+
+#include "AVL.h"
 
 
 using namespace std;

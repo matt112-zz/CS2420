@@ -12,9 +12,9 @@ class AVL {
 private:
 	struct Node{
 		int data;
+		int height;
 		Node* left;
 		Node* right;
-		int height;
 
 		Node(int d): data(d), left(nullptr), right(nullptr), height(1){};
 	};
@@ -28,8 +28,8 @@ private:
 	Node* leftrotate(Node* root);
 	Node* rightrotate(Node* root);
 	bool search(Node* root, int data);
-	void preorder(Node* root);
 	void inorder(Node* root);
+	void preorder(Node* root);
 	void postorder(Node* root);
 	void rebalance(Node* &root);
 	int balance(Node* root);
