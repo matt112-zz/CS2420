@@ -1,15 +1,6 @@
-/*
- * Hash.h
- *
- *  Created on: Nov 15, 2015
- *      Author: matt
- */
-
-#ifndef HASH_H_
-#define HASH_H_
+#pragma once
 
 #include <string>
-//#include <vector>
 #include <iostream>
 
 using namespace std;
@@ -22,13 +13,11 @@ public:
 	double retrieve(string key);
 	int hash(string key);
 	void clear();
+	double operator[](string key);
 
 	void updateLoadValue();
 	double getLoadValue();
 	int numOfCollisions();
-
-	double operator[](string key);
-
 private:
 	struct Node{
 		string key;
@@ -45,4 +34,3 @@ private:
 	Node* array[160] = {nullptr};
 };
 
-#endif /* HASH_H_ */

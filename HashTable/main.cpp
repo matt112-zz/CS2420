@@ -2,11 +2,10 @@
 #include <sstream>
 #include <string>
 #include <fstream>
-#include <vector>
 #include <algorithm>
 #include <cctype>
-#include <stack>
 #include "Hash.h"
+#include "Stack.h"
 
 using namespace std;
 
@@ -24,9 +23,7 @@ void createHashTable(string fileName, Hash& test);
 int main() {
 	Hash test;
 	string fileName("PeriodicTableElements.txt");
-	string line;
 	string formula = "";
-
 	double weight;
 
 	createHashTable(fileName, test);
@@ -45,7 +42,7 @@ double processWeight(string formula, Hash& test) {
 	double weight = 0;
 	string element = "";
 	char c;
-	stack<char> res;
+	Stack<char> res;
 
 	stringstream ss(formula);
 
@@ -60,48 +57,34 @@ double processWeight(string formula, Hash& test) {
 		res.pop();
 		if(isalpha(top)) {
 			if(isupper(top)) {
-				//cout << top << " is upper case" << endl;
 				string key = charToString(top);
-				//cout << key << " after converting from char to string." << endl;
 				weight += test[key];
-				//cout << weight << endl;
 			}
 			else if(islower(top)){
-				//cout << top << " is lowercase" << endl;
 				element = charToString(res.top()) + charToString(top);
-				//cout << res.top() << " is the char on top" << endl;
-				//cout << "After " << element << endl;
 				res.pop();
-				//cout << element << endl;
 				weight += test[element];
-				//cout << weight << endl;
 			}
 		}
 		else if(isdigit(top) && res.top() == ')' ) {
-			//cout << top << " is a multiplier of a subformula" << endl;
 			int multiplier = charToInt(top);
-			res.pop(); // poping ')'
+			res.pop(); // pop ')'
 			string subFormula = "";
 
 			while(res.top() != '(') {
 				subFormula = charToString(res.top()) + subFormula;
 				res.pop();
 			}
-			//cout << subFormula << " is the subformula" << endl;
-			res.pop(); //poping the left parentheses
-			//cout << "Weight before adding subformula " << weight << endl;
+			res.pop(); //pop the left parentheses
 			weight = (multiplier * processWeight(subFormula, test));  //adding weight of subformula
-			//cout << "Weight after adding subformula " << weight << endl;
 		}
 		else if(isdigit(top)) {
-			//cout << top << " is a number" << endl;
-			int mult = charToInt(top);
+			int multiple = charToInt(top);
 
 			if(isdigit(res.top())) {
 				stringstream number;
-				number << charToInt(res.top()) << mult;
-				number >> mult;
-				//cout << "The multiple is " << mult << endl;
+				number << charToInt(res.top()) << multiple;
+				number >> multiple;
 				res.pop();
 			}
 
@@ -112,15 +95,11 @@ double processWeight(string formula, Hash& test) {
 			element = res.top() + element;
 			res.pop();
 
-			//cout << element << endl;
 
-			weight +=  mult * test[element];
-			//cout << weight << endl;
+			weight +=  multiple * test[element];
 			element = "";
 		}
 		else if(top == ')') {
-			//cout << top << " is a right parentheses" << endl;
-
 			string subFormula = "";
 
 			while(res.top() != '(') {
@@ -128,12 +107,10 @@ double processWeight(string formula, Hash& test) {
 				res.pop();
 			}
 
-			res.pop(); //poping the left parentheses
-			//cout << "Weight before adding subformula " << weight << endl;
+			res.pop(); //pop the left parentheses
 			weight = weight + processWeight(subFormula, test);//adding weight of subformula
-			//cout << "Weight after adding subformula is " << weight << endl;
 		}
-		else if(top == '\r') cout << "End of line Character" << endl;
+		else cout << "End of line Character" << endl;
 	}
 
 	return weight;
@@ -149,14 +126,18 @@ string charToString(char c) {
 }
 
 int charToInt(char c) {
-	int num = c - '0';
-	return num;
+	stringstream ss;
+	int index;
+	ss << c;
+	ss >> index;
+
+	return index;
 }
 
 void createHashTable(string fileName, Hash& test) {
-	ifstream i(fileName);
+	ifstream ifs(fileName);
 
-	if(i.fail()) {
+	if(ifs.fail()) {
 		cout << "invalid file name" << endl;
 		return;
 	}
@@ -165,10 +146,10 @@ void createHashTable(string fileName, Hash& test) {
 	string element;
 	double value;
 
-	while(i >> num) {
-		i >> element >> value;
+	while(ifs >> num) {
+		ifs >> element >> value;
 		test.insert(element, value);
 	}
 
-	i.close();
+	ifs.close();
 }
