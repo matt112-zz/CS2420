@@ -10,10 +10,66 @@
 
 using namespace std;
 
+double processWeight(string formula, Hash& test) {
+	double weight = 0;
+	string element = "";
+	char c;
+	stack<char> res;
+
+	stringstream ss(formula);
+
+	while(ss.get(c)) {
+		res.push(c);
+	}
+
+	while(!res.empty()) {
+		char top = res.top();
+		res.pop();
+		if(isalpha(top)) {
+			if(isupper(top)) {
+				weight += test[top];
+				cout << weight << endl;
+			}
+			else {
+				element = res.top() + top;
+				res.pop();
+				cout << element << endl;
+				weight += test[element];
+				cout << weight << endl;
+			}
+		}
+		else if(isdigit(top)) {
+			cout << top << " is a number" << endl;
+			while(!isupper(res.top())) {
+				element = res.top() + element;
+				res.pop();
+			}
+			element = res.top() + element;
+			res.pop();
+
+			cout << element << endl;
+
+			int d = top - '0';
+			weight += d * test[element];
+			cout << weight << endl;
+			element = "";
+		}
+		else if(top == '(' || top == ')') {
+			cout << top << " is a parentheses" << endl;
+
+		}
+		else cout << "End of line Character" << endl;
+	}
+
+	return weight;
+}
+
+
+
+
 int main() {
 	Hash test;
 	ifstream i("PeriodicTableElements.txt");
-	//ofstream o("array.txt");
 	int num;
 	string element;
 	string line;
@@ -23,38 +79,45 @@ int main() {
 	while(i >> num) {
 		i >> element >> value;
 		test.insert(element, value);
-		//o << index << " " << value << endl;
 	}
 
 	i.close();
-
-//	ifstream j("test.txt");
-//
-//	while(j >> element) {
-//		cout << element << " " << test.retrieve(element) << endl;
-//	}
-
 
 	char c;
 
 	ifstream formulas("formulas.txt");
 	stack<char> res;
 
-	while(!formulas.eof()) {\
+	while(!formulas.eof()) {
 		element = "";
 		num = 0;
 		weight = 0;
 		getline(formulas, line);
 		stringstream ss(line);
+
 		while(ss.get(c)) {
-			if(isalpha(c)) {
-				res.push(c);
-				cout << "Pushed " << c << " on the stack" << endl;
+			res.push(c);
+		}
+
+		while(!res.empty()) {
+			char top = res.top();
+			res.pop();
+			if(isalpha(top)) {
+				if(isupper(top)) {
+					weight += test[top];
+					cout << weight << endl;
+				}
+				else {
+					element = res.top() + top;
+					res.pop();
+					cout << element << endl;
+					weight += test[element];
+					cout << weight << endl;
+				}
 			}
-			else if(isdigit(c)) {
-				cout << c << " is a number" << endl;
-				cout << res.top() << endl;
-				while(!res.empty() && !isupper(res.top())) {
+			else if(isdigit(top)) {
+				cout << top << " is a number" << endl;
+				while(!isupper(res.top())) {
 					element = res.top() + element;
 					res.pop();
 				}
@@ -63,38 +126,17 @@ int main() {
 
 				cout << element << endl;
 
-				int d = c - '0';
+				int d = top - '0';
 				weight += d * test[element];
 				cout << weight << endl;
 				element = "";
 			}
-			else if(c == '(' || c == ')') {
-				cout << c << " is a parentheses" << endl;
-			}
-			else if(c == '\n') {
-				cout << "End of line" << endl;
-			}
-			else {
-				cout << "Whoe knows..." << endl;
-			}
-		}
+			else if(top == '(' || top == ')') {
+				cout << top << " is a parentheses" << endl;
 
-		while(!res.empty()) {
-			while(!isupper(res.top())) {
-				cout << res.top() << " is on top of the stack." << endl;
-				element = res.top() + element;
-				res.pop();
 			}
-			element = res.top() + element;
-			res.pop();
-
-			cout << element << endl;
-			weight += test[element];
-			cout << weight << endl;
-			element = "";
+			else cout << "End of line Character" << endl;
 		}
-		cout << "Stack is empty" << endl;
-		cout << "Done with that line. Total weight is: " << weight << endl << endl;
 	}
 	return 0;
 }
