@@ -29,8 +29,8 @@ private:
 
 	double loadValue;
 	int size;
-	int capacity = 160;
+	int capacity = 139;
 	int collisions = 0;
-	Node* array[160] = {nullptr};
+	Node* array[139] = {nullptr};
 };
 

@@ -40,7 +40,7 @@ int main() {
 
 	ifstream formulasFile("formulas.txt");
 
-	while(formulasFile >> formula) {
+	while (formulasFile >> formula) {
 		weight = processWeight(formula, test);
 		cout << formula << " has a weight of " << weight << endl;
 	}
@@ -57,48 +57,48 @@ double processWeight(string formula, Hash& test) {
 	stringstream ss(formula);
 
 	//pushing all the chars from the string on the stack
-	while(ss.get(c)) {
+	while (ss.get(c)) {
 		res.push(c);
 	}
 
 	//finding the result of the formula
-	while(!res.empty()) {
+	while (!res.empty()) {
 		char top = res.top();
 		res.pop();
-		if(isalpha(top)) {
-			if(isupper(top)) {
+		if (isalpha(top)) {
+			if (isupper(top)) {
 				string key = charToString(top);
 				weight += test[key];
 			}
-			else if(islower(top)){
+			else if (islower(top)) {
 				element = charToString(res.top()) + charToString(top);
 				res.pop();
 				weight += test[element];
 			}
 		}
-		else if(isdigit(top) && res.top() == ')' ) {
+		else if (isdigit(top) && res.top() == ')') {
 			int multiplier = charToInt(top);
 			res.pop(); // pop ')'
 			string subFormula = "";
 
-			while(res.top() != '(') {
-				subFormula+=res.top();
+			while (res.top() != '(') {
+				subFormula = charToString(res.top()) + subFormula;
 				res.pop();
 			}
 			res.pop(); //pop the left parentheses
 			weight = (multiplier * processWeight(subFormula, test));  //adding weight of subformula
 		}
-		else if(isdigit(top)) {
+		else if (isdigit(top)) {
 			int multiple = charToInt(top);
 
-			if(isdigit(res.top())) {
+			if (isdigit(res.top())) {
 				stringstream number;
 				number << charToInt(res.top()) << multiple;
 				number >> multiple;
 				res.pop();
 			}
 
-			while(!isupper(res.top())) {
+			while (!isupper(res.top())) {
 				element = res.top() + element;
 				res.pop();
 			}
@@ -106,13 +106,13 @@ double processWeight(string formula, Hash& test) {
 			res.pop();
 
 
-			weight +=  multiple * test[element];
+			weight += multiple * test[element];
 			element = "";
 		}
-		else if(top == ')') {
+		else if (top == ')') {
 			string subFormula = "";
 
-			while(res.top() != '(') {
+			while (res.top() != '(') {
 				subFormula = charToString(res.top()) + subFormula;
 				res.pop();
 			}
@@ -126,6 +126,14 @@ double processWeight(string formula, Hash& test) {
 	return weight;
 }
 
+string charToString(char c) {
+	stringstream charToStr;
+	string key;
+	charToStr << c;
+	charToStr >> key;
+
+	return key;
+}
 
 int charToInt(char c) {
 	stringstream ss;
@@ -139,7 +147,7 @@ int charToInt(char c) {
 void createHashTable(string fileName, Hash& test) {
 	ifstream ifs(fileName);
 
-	if(ifs.fail()) {
+	if (ifs.fail()) {
 		cout << "invalid file name" << endl;
 		return;
 	}
@@ -148,7 +156,7 @@ void createHashTable(string fileName, Hash& test) {
 	string element;
 	double value;
 
-	while(ifs >> num) {
+	while (ifs >> num) {
 		ifs >> element >> value;
 		test.insert(element, value);
 	}
