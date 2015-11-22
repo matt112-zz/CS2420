@@ -13,7 +13,6 @@
 #include <sstream>
 #include <string>
 #include <fstream>
-#include <algorithm>
 #include <cctype>
 #include "Hash.h"
 #include "Stack.h"
@@ -36,8 +35,6 @@ int main() {
 	string fileName("PeriodicTableElements.txt");
 	string formula = "";
 	double weight;
-
-	cout << "This is a test" << endl;
 
 	createHashTable(fileName, test);
 
@@ -85,7 +82,7 @@ double processWeight(string formula, Hash& test) {
 			string subFormula = "";
 
 			while(res.top() != '(') {
-				subFormula = charToString(res.top()) + subFormula;
+				subFormula+=res.top();
 				res.pop();
 			}
 			res.pop(); //pop the left parentheses
@@ -129,14 +126,6 @@ double processWeight(string formula, Hash& test) {
 	return weight;
 }
 
-string charToString(char c) {
-	stringstream charToStr;
-	string key;
-	charToStr << c;
-	charToStr >> key;
-
-	return key;
-}
 
 int charToInt(char c) {
 	stringstream ss;
