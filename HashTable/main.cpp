@@ -37,6 +37,8 @@ int main() {
 	string formula = "";
 	double weight;
 
+	cout << "This is a test" << endl;
+
 	createHashTable(fileName, test);
 
 	ifstream formulasFile("formulas.txt");
